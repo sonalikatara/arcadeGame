@@ -1,4 +1,4 @@
-
+"use strict";
 var keysDown = {};
 
 // Enemies our player must avoid
@@ -26,7 +26,6 @@ Enemy.prototype.update = function(dt) {
         this.x =  Math.random() * 430;
         this.y = (Math.random() * 120 ) + (Math.random() * 150);
     };
-
 
     // Are they touching?
 
@@ -67,18 +66,19 @@ var Player = function(){
 
 Player.prototype.update = function(dt) {
 
-   player.handleInput(dt);
+   this.handleInput(dt);
 
    // Prevent the player from falling off the canvas
    // canvas width is 505 and height is 608 but 456 looks
    // like the maximum value for player.Y
 
-   if(player.x > 505){player.x = 1;}; // player crossed the screen
-   if(player.x < 1){player.x = 505;};
-   if(player.y > 456){player.y = 455;}; // player reached the bottom of the screen
-   if(player.y < 1){    // Player has reached water
-       player.y = 456; // Player is now on grass 
-       ++player.gems;  // Add one more gem to the collection
+   if(this.x > 420){this.x = 420;}; // player falling off the screen
+   if(this.x < 1){this.x = 1;};
+   if(this.y > 456){this.y = 455;}; // player reached the bottom of the screen
+   if(this.y < 1){    // Player has reached water
+       this.y = 330; // Player is now on grass 
+       this.x = 200;
+       ++this.gems;  // Add one more gem to the collection
     };
 
 };
@@ -89,16 +89,16 @@ Player.prototype.render = function(){
 
  Player.prototype.handleInput = function(dt){
      if ('left' in keysDown){
-        player.x -= player.speed * dt;
+        this.x -= this.speed * dt;
    }
     if ('right' in keysDown){
-        player.x += player.speed * dt;
+        this.x += this.speed * dt;
     }
     if ('up' in keysDown){
-        player.y -= player.speed * dt;
+        this.y -= this.speed * dt;
     }
     if ('down' in keysDown){
-        player.y += player.speed * dt;
+        this.y += this.speed * dt;
     }
  } ;
 
