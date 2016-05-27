@@ -8,7 +8,7 @@ var Enemy = function() {
     this.speed = 210; // movement in pixel per second
     this.x = 0;
     this.y = 0;
-    
+
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -21,27 +21,29 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed * dt;
-    
+
     if (this.x > 505){
         this.x =  Math.random() * 430;
         this.y = (Math.random() * 120 ) + (Math.random() * 150);
     };
-    
-     
+
+
     // Are they touching?
-  
+
     if (
             player.x <= (this.x + 42)
             && this.x <= (player.x + 42)
             && player.y <= (this.y + 42)
             && this.y <= (player.y + 42)
     ) {
+            // yes they are touching so the player looses a life
+            // and the player is brought back to start
             --player.livesLeft;
             //reset();
              player.x = 200;
              player.y = 330 + Math.random(150);
-    }; 
-       
+    };
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -57,33 +59,34 @@ var Player = function(){
     this.x = 200;
     this.y = 330;
     // The image/sprite for our player, this uses
-    // a helperin resources.js to easily load images
+    // a helper in resources.js to easily load images
     this.sprite = 'images/char-cat-girl.png';
-    this.livesLeft = 15;
-    this.gems = 0;
+    this.livesLeft = 15; // A player gets 15 lives in a game
+    this.gems = 0;       // The player collects a gem each time he reaches water
 };
 
 Player.prototype.update = function(dt) {
- 
-   player.handleInput(dt);
-   
-   // Prevent the player from falling off the canvas
-   // canvas width is 505 and height is 608 but 456 looks like the maximum value for player.Y
 
-   if(player.x > 505){player.x = 1;}; 
-   if(player.x < 1){player.x = 505;}; 
-   if(player.y > 456){player.y = 1;}; 
-   if(player.y < 1){
-       player.y = 456;
-       ++player.gems;
-    }; 
-    
+   player.handleInput(dt);
+
+   // Prevent the player from falling off the canvas
+   // canvas width is 505 and height is 608 but 456 looks
+   // like the maximum value for player.Y
+
+   if(player.x > 505){player.x = 1;}; // player crossed the screen
+   if(player.x < 1){player.x = 505;};
+   if(player.y > 456){player.y = 455;}; // player reached the bottom of the screen
+   if(player.y < 1){    // Player has reached water
+       player.y = 456; // Player is now on grass 
+       ++player.gems;  // Add one more gem to the collection
+    };
+
 };
 
 Player.prototype.render = function(){
     ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
     };
-    
+
  Player.prototype.handleInput = function(dt){
      if ('left' in keysDown){
         player.x -= player.speed * dt;
@@ -95,10 +98,10 @@ Player.prototype.render = function(){
         player.y -= player.speed * dt;
     }
     if ('down' in keysDown){
-        player.y += player.speed * dt; 
+        player.y += player.speed * dt;
     }
- } ;  
-    
+ } ;
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -117,8 +120,7 @@ allEnemies[3].y =(Math.random() * 50 )+ (Math.random() * 200);
 var player = new Player();
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-
+// Player.handleInput() method.
 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {

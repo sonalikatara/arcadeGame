@@ -24,7 +24,7 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
-  
+
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
@@ -41,7 +41,7 @@ var Engine = (function(global) {
          */
         var now = Date.now(),
         dt = (now - lastTime) / 1000.0;
-       
+
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
@@ -64,7 +64,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        
+
         reset();
         lastTime = Date.now();
         main();
@@ -92,25 +92,25 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-       
+
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
         player.update(dt);
-       
+
     }
-    
+
     /*
      * if the Player has used all his lives a new game is started
      * by resetting his lives to 15 and gems to 0
      */
     function checkCollisions(){
-        // Score
-      
+        // Reset Gems and Lives if the player looses all the lives
+
         if (player.livesLeft === 0){
             player.livesLeft = 15;
             player.gems = 0;
-            
+
         }
     }
 
@@ -156,9 +156,9 @@ var Engine = (function(global) {
         ctx.drawImage(Resources.get('images/Heart.png'),1,0);
         /* display the Blue Gem image to show the number of gems collected */
         ctx.drawImage(Resources.get('images/Gem%20Blue.png'),400,0);
-        
+
         renderEntities();
-       
+
     }
 
     /* This function is called by the render function and is called on each game
@@ -174,13 +174,13 @@ var Engine = (function(global) {
         });
 
         player.render();
-        // Display Scores :: the lives left and the Gems collected 
-	ctx.fillStyle = "rgb(250, 250, 250)";
-	ctx.font = "bold 24px Helvetica";
-	ctx.textAlign = "left";
-	ctx.textBaseline = "top";
-	ctx.fillText( player.livesLeft, 42, 72);
-        ctx.fillText(player.gems, 445,95);
+        // Display Scores :: the lives left and the Gems collected
+        ctx.fillStyle = "rgb(250, 250, 250)";
+        ctx.font = "bold 24px Helvetica";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText( player.livesLeft, 42, 72); // display lives left on the heart icon
+        ctx.fillText(player.gems, 445,95);       // display gems collected on the gem icon
     }
 
     /* This function does nothing but it could have been a good place to
@@ -189,7 +189,6 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
-       
     }
 
     /* Go ahead and load all of the images we know we're going to need to
